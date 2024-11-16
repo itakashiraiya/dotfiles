@@ -1,0 +1,98 @@
+#!/bin/bash
+
+dotfiles="$HOME/.config/dotfiles"
+
+
+if [[ "$1" == "-u" ]]; then
+	name="$2"
+	if [[ -z "$name" ]]; then
+		echo "correct usage: mv.2files -u <name>"
+		exit
+	elif [[ ! -e "$dotfiles/$name" ]]; then
+		echo "package \"$name\" doesnt exist"
+		exit
+	fi
+	
+	rm-r-sym() (
+		dir="$1"
+
+		if [[ "${dir:0:1}" != "/" ]]; then
+			echo "use absolute dir for \"rm-r-sym()\""
+			echo "(used $dir)"
+			exit
+		fi
+
+		rm-if-from-pkg() (
+			name="$1"
+			link="$2"
+			echo "link: $link!"
+			src="$(readlink -f $link)"
+			echo "src: $src!"
+			if [[ "${src#$dotfiles/$name}" == "${link#$HOME}" ]]; then
+				rm "$link"
+			fi
+		)
+
+		if [[ -h "$dir" ]]; then
+			rm-if-from-pkg "$name" "$dir"
+			return
+		fi
+
+		rm-r-sym2() (
+			dir="$1"
+			for f in $dir/*; do
+				if [[ -h "$f" ]]; then
+					echo "$f"
+					rm-if-from-pkg "$name" "$f"
+				elif [[ -d "$f" ]]; then
+					# echo "searching $f..."
+					rm-r-sym2 $f
+				fi
+			done
+
+		)
+
+		rm-r-sym2 "$dir"
+	)
+
+
+	rm-r-sym "$HOME/test"
+	rsync -av --ignore-existing $dotfiles/$name/* $HOME
+	exit
+fi
+
+name="$1"
+if [[ -z "$name" ]]; then
+	echo "correct usage: mv2.files <name> <relative_dir>"
+	echo "if relative_dir is empty it uses the dir from which it was called"
+	exit
+fi
+
+abs_path="$(pwd)/$2"
+abs_path="${abs_path%\/}"
+if [[ ! -e "$abs_path" ]]; then
+	echo "file or folder does not exist"
+	exit
+fi
+
+home_path="${abs_path/#$HOME/\~}"
+echo "$home_path"
+
+rel_path="${home_path/#\~\/}"
+
+
+cd $dotfiles
+
+echo "$(pwd)"
+
+if [[ -e "$name" ]]; then
+	echo "package \"$name\" exists already"
+else
+	mkdir -p "$name/$rel_path"
+	rm -d "$name/$rel_path"
+	mv "$abs_path" "$name/$rel_path"
+
+	stow -v -t ~ "$name" 
+fi
+
+
