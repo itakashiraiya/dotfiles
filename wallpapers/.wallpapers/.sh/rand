@@ -1,8 +1,0 @@
-#!/bin/bash
-
-cd $(dirname $0)
-
-images="$(find -type f -not -path "*.excluded*" \( -name *.jpg \))"
-rand=$(echo "$images" | shuf -n1)
-
-feh --bg-scale "$rand"

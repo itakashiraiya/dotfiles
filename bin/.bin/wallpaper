@@ -1,0 +1,35 @@
+#!/bin/bash
+
+wallpapers="$HOME/.wallpapers"
+cron="/etc/cron.d/wallpaper"
+
+if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
+	echo "$0 <timer (min) / subfolder> <other>"
+	exit
+fi
+
+if [[ ! -e "$cron" ]]; then
+	sudo touch "$cron"
+fi
+
+if [ "$1" -eq "$1" ] 2>/dev/null; then
+	if [ -n "$2" ] && [ "$2" -eq "$2" ] 2>/dev/null; then
+		echo "warning: both inputs are integers, 1st arg will be considered as timer"
+	fi
+	time="${1:-5}"
+	target="${2:-.}"
+else
+	time="${2:-5}"
+	target="${1:-.}"
+fi
+
+if [ ! -e "$wallpapers/$target" ]; then
+	echo "invalid subfolder/target"
+	exit
+fi
+
+sudo bash -c "echo \"SHELL=/bin/bash
+BASH_ENV=$HOME/.bashrc
+*/$time * * * * viktor DISPLAY=:1 /usr/bin/feh --bg-scale \\\"\\\$(find \\\"$wallpapers/$target\\\" -type f -not -path \\\"*.excluded*\\\" -name \\\"*.jpg\\\" | shuf -n1)\\\"
+\" > $cron"
+
