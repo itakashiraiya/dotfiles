@@ -222,8 +222,8 @@ exec --no-startup-id $app9
 exec --no-startup-id $app10
 
 exec --no-startup-id picom
-exec_always --no-startup-id feh --bg-scale "$HOME/.wallpapers/.excluded/none.jpg"
-
+exec --no-startup-id feh --bg-scale "$HOME/.wallpapers/.excluded/none.jpg"
+exec --no-startup-id setxkbmap -layout gb,se,pt -option 'grp:alt_shift_toggle'
 # start a terminal
 bindsym $mod+Return exec $term
 
