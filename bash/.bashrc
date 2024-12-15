@@ -4,6 +4,9 @@
 
 export PATH="$HOME/.bin:$PATH"
 PATH="$PATH:/usr/local/go/root/bin"
+PATH="$PATH:/usr/local/go/path/bin"
+export GOPATH="/usr/local/go/path"
+PATH="$PATH:$HOME/user-dirs/Apps"
 
 # If not running interactively, don't do anything
 case $- in
