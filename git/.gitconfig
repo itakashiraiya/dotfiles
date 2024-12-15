@@ -3,3 +3,5 @@
 	email = 79550547+itakashiraiya@users.noreply.github.com
 [init]
 	defaultBranch = master
+[core]
+	autocrlf = input
