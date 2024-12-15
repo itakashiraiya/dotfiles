@@ -225,7 +225,9 @@ exec --no-startup-id $app10
 
 exec --no-startup-id picom
 exec --no-startup-id feh --bg-scale "$HOME/.wallpapers/.excluded/none.jpg"
-exec --no-startup-id setxkbmap -layout gb,se,pt -option 'grp:alt_shift_toggle'
+exec_always --no-startup-id /usr/bin/setxkbmap -layout gb,se,pt -option 'grp:alt_shift_toggle'
+exec_always --no-startup-id /usr/bin/xinput set-prop $(xinput | grep "Logitech G502 HERO Gaming Mouse  " | cut -d $'\t' -f 2 | cut -c 4-5) "libinput Accel Profile Enabled" 0, 1
+exec_always --no-startup-id /usr/bin/xinput set-prop $(xinput | grep "Logitech G502 HERO Gaming Mouse  " | cut -d $'\t' -f 2 | cut -c 4-5) "libinput Accel Speed" -0.6
 # start a terminal
 bindsym $mod+Return exec $term
 
