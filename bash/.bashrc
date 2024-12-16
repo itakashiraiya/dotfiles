@@ -2,17 +2,20 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-export PATH="$HOME/.bin:$PATH"
+XDG_CONFIG_HOME="~/.config"
 PATH="$PATH:/usr/local/go/root/bin"
 PATH="$PATH:/usr/local/go/path/bin"
 export GOPATH="/usr/local/go/path"
 PATH="$PATH:$HOME/user-dirs/Apps"
+export PATH="$PATH:~/dev/bin"
 
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
       *) return;;
 esac
+
+source $HOME/dev/bashsrc/*
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
