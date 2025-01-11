@@ -2,7 +2,7 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-XDG_CONFIG_HOME="~/.config"
+XDG_CONFIG_HOME="$HOME/.config"
 PATH="$PATH:/usr/local/go/root/bin"
 PATH="$PATH:/usr/local/go/path/bin"
 export GOPATH="/usr/local/go/path"
