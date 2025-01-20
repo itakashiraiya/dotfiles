@@ -69,7 +69,9 @@ if [[ -z "$name" ]]; then
 fi
 
 abs_path="$(pwd)/$2"
+echo "$abs_path"
 abs_path="${abs_path%\/}"
+echo "$abs_path"
 if [[ ! -e "$abs_path" ]]; then
 	echo "file or folder does not exist"
 	exit
@@ -85,14 +87,7 @@ cd $dotfiles
 
 echo "$(pwd)"
 
-if [[ -e "$name" ]]; then
-	echo "package \"$name\" exists already"
-else
-	mkdir -p "$name/$rel_path"
-	rm -d "$name/$rel_path"
-	mv "$abs_path" "$name/$rel_path"
+mkdir -p "$(dirname "$name/$rel_path")"
 
-	stow -v -t ~ "$name" 
-fi
-
-
+mv "$abs_path" "$name/$rel_path"
+stow -v -t ~ "$name" 
