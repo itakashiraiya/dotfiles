@@ -8,6 +8,8 @@ PATH="$PATH:/usr/local/go/path/bin"
 export GOPATH="/usr/local/go/path"
 PATH="$PATH:$HOME/user-dirs/Apps"
 export PATH="$PATH:~/dev/bin"
+eval "$(luarocks path)"
+export LUA_PATH="$LUA_PATH;$HOME/dev/lua/packages/?.lua;$HOME/dev/lua/packages/?/init.lua"
 
 # If not running interactively, don't do anything
 case $- in
@@ -15,7 +17,13 @@ case $- in
       *) return;;
 esac
 
-source $HOME/dev/bash/src/*
+shopt -s globstar
+for file in "$HOME/dev/bash/src/"**/*.sh; do
+    echo "$file"
+    if [[ -f "$file" && -r "$file" ]]; then
+	source "$file"
+    fi
+done
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
