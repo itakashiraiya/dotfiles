@@ -1,0 +1,48 @@
+#!/usr/bin/env lua
+
+local lfs = require("mylfs")
+local argparse = require("argparse")
+
+-- Create the parser
+local parser = argparse("script", "Compile C++ files with MSVC.")
+parser:argument("input", "Input file(s)"):args("*"):default({ "./" })
+parser:option("-o --output", "Output file", "bin/main.exe")
+
+-- Parse arguments
+local args = parser:parse()
+
+if #args.input == 0 then
+	args.input = { "." }
+end
+
+local files_to_compile = {}
+
+for _, inode in ipairs(args.input) do
+	local attr = lfs.attributes(inode)
+
+	if attr and attr.mode == "file" then
+		if string.match(inode, ".*%.cpp") then
+			table.insert(files_to_compile, inode)
+		else
+			print("File: " .. inode .. " not valid.")
+		end
+	elseif attr and attr.mode == "directory" then
+		local files = lfs.find(inode, { r = true, f = ".*%.cpp" })
+		for _, file in ipairs(files) do
+			table.insert(files_to_compile, file)
+		end
+	end
+end
+
+if #files_to_compile == 0 then
+	print("Found no files to compile")
+	return
+end
+
+-- Use the arguments
+print("Input files:")
+for _, file in ipairs(files_to_compile) do
+	print("  - " .. file)
+end
+
+print("Output file: " .. args.output)

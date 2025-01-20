@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd /mnt/c
+echo "Switched to $1"
+cmd.exe /c "wsl ~ -d $1"
