@@ -19,7 +19,6 @@ esac
 
 shopt -s globstar
 for file in "$HOME/dev/bash/src/"**/*.sh; do
-    echo "$file"
     if [[ -f "$file" && -r "$file" ]]; then
 	source "$file"
     fi
