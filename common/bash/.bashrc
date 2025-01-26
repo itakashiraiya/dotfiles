@@ -17,6 +17,8 @@ case $- in
       *) return;;
 esac
 
+alias harb="~/dev/lua/harbonizer/init.lua"
+
 shopt -s globstar
 for file in "$HOME/dev/bash/src/"**/*.sh; do
     if [[ -f "$file" && -r "$file" ]]; then
